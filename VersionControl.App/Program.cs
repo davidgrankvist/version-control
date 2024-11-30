@@ -1,2 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using VersionControl.Lib.Execution;
+
+namespace VersionControl.App;
+
+internal class Program
+{
+	public static void Main(string[] args)
+	{
+		var cli = new Cli();
+		cli.Run(args);
+	}
+}
