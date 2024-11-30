@@ -6,7 +6,7 @@ internal class Program
 {
 	public static void Main(string[] args)
 	{
-		var cli = new Cli();
+		var cli = CliCreator.Create();
 		cli.Run(args);
 	}
 }

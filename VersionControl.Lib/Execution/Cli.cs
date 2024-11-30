@@ -8,13 +8,6 @@ namespace VersionControl.Lib.Execution
 		private readonly IDocumentationService documentationService;
 		private readonly IExecutor executor;
 
-		public Cli()
-		{
-			var consoleDocSvc = new ConsoleDocumentationService();
-			documentationService = consoleDocSvc;
-			executor = new Executor(documentationService);
-		}
-
 		public Cli(IExecutor executor, IDocumentationService documentationService)
 		{
 			this.documentationService = documentationService;
