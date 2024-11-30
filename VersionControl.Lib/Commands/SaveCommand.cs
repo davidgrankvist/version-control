@@ -5,9 +5,14 @@ namespace VersionControl.Lib.Commands
 	public class SaveCommand : IVersionControlCommand
 	{
 		public const string Name = "save";
-		private static readonly CommandDocumentation docs = new(Name, "Some description.", "Some summary");
+		private static readonly CommandDocumentation docs = new(Name, "Save changes.", "Save changes.");
 
 		private readonly IReadOnlyCollection<string> files;
+
+		public SaveCommand()
+		{
+			files = [];
+		}
 
 		public SaveCommand(IReadOnlyCollection<string> files)
 		{

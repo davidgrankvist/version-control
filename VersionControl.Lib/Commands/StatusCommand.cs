@@ -5,7 +5,11 @@ namespace VersionControl.Lib.Commands
 	public class StatusCommand : IVersionControlCommand
 	{
 		public const string Name = "status";
-		private static readonly CommandDocumentation docs = new(Name, "Some description.", "Some summary");
+		private static readonly CommandDocumentation docs = new(Name, "List changes.", "List changes.");
+
+		public StatusCommand()
+		{
+		}
 
 		public bool CanExecute()
 		{

@@ -7,8 +7,11 @@ namespace VersionControl.Lib.Commands
 		private readonly string? change;
 
 		public const string Name = "goto";
-		private static readonly CommandDocumentation docs = new(Name, "Some description.", "Some summary");
+		private static readonly CommandDocumentation docs = new(Name, "Time travel.", "Move to a point in history.");
 
+		public GotoCommand()
+		{
+		}
 
 		public GotoCommand(string? change)
 		{

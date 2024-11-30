@@ -8,7 +8,11 @@ namespace VersionControl.Lib.Commands
 		private readonly string? toChange;
 
 		public const string Name = "compare";
-		private static readonly CommandDocumentation docs = new(Name, "Some description.", "Some summary");
+		private static readonly CommandDocumentation docs = new(Name, "Compare changes.", "Compare changes.");
+
+		public CompareCommand()
+		{
+		}
 
 		public CompareCommand(string? fromChange, string? toChange)
 		{
