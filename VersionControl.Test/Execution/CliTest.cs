@@ -43,13 +43,13 @@ namespace VersionControl.Test.Execution
 		}
 
 		[DataTestMethod]
-		[DynamicData(nameof(CommandTestDataHelper.GetSuccessfulParseTestCasesAsObj), typeof(CommandTestDataHelper), DynamicDataSourceType.Method)]
-		public void ShouldExecuteCommand(string[] args, IVersionControlCommand command)
+		[DynamicData(nameof(CommandTestDataHelper.GetSuccessfulParseTestCases), typeof(CommandTestDataHelper), DynamicDataSourceType.Method)]
+		public void ShouldExecuteCommand(string[] args, TestSerializationWrapper<IVersionControlCommand> wrapper)
 		{
 			cli.Run(args);
 
 			Assert.AreEqual(1, executor.Calls.Count);
-			Assert.AreEqual(command, executor.Calls.First().Command);
+			Assert.AreEqual(wrapper.Data, executor.Calls.First().Command);
 			Assert.IsFalse(executor.Calls.First().HelpMode);
 		}
 	}

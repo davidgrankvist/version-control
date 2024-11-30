@@ -28,12 +28,12 @@ namespace VersionControl.Test.Parsing
 		}
 
 		[DataTestMethod]
-		[DynamicData(nameof(CommandTestDataHelper.GetSuccessfulParseTestCasesAsObj), typeof(CommandTestDataHelper), DynamicDataSourceType.Method)]
-		public void ShouldParseAsCommand(string[] args, IVersionControlCommand expected)
+		[DynamicData(nameof(CommandTestDataHelper.GetSuccessfulParseTestCases), typeof(CommandTestDataHelper), DynamicDataSourceType.Method)]
+		public void ShouldParseAsCommand(string[] args, TestSerializationWrapper<IVersionControlCommand> wrapper)
 		{
 			var (command, helpMode) = ArgumentParser.Parse(args);
 
-			Assert.AreEqual(expected, command);
+			Assert.AreEqual(wrapper.Data, command);
 		}
 	}
 }
