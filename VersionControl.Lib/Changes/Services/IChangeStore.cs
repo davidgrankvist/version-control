@@ -8,7 +8,7 @@ namespace VersionControl.Lib.Changes.Services
 
 		ChangeSet GetChange(string changeId);
 
-		FileSnapshot GetSnapshot(string fileId, string? changeId = null);
+		FileSnapshot GetSnapshot(string filePath, string? changeId = null);
 
 		string GetCurrentChangeId();
 	}

@@ -1,5 +1,6 @@
 ﻿using VersionControl.Lib.Commands;
 using VersionControl.Lib.Execution;
+using VersionControl.Lib.Parsing;
 using VersionControl.Test.Mocks;
 using VersionControl.Test.TestHelpers;
 
@@ -17,7 +18,8 @@ namespace VersionControl.Test.Execution
 		{
 			documentationService = new DocumentationServiceSpy();
 			executor = new ExecutorSpy();
-			cli = new Cli(executor, documentationService);
+			var commandFactory = new CommandFactory(new ChangeServiceSpy());
+			cli = new Cli(executor, documentationService, new ArgumentParser(commandFactory));
 		}
 
 		[DataTestMethod]

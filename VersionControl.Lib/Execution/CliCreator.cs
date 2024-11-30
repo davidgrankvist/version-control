@@ -1,4 +1,6 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
+using VersionControl.Lib.Parsing;
 
 namespace VersionControl.Lib.Execution
 {
@@ -8,7 +10,9 @@ namespace VersionControl.Lib.Execution
 		{
 			var documentationService = new ConsoleDocumentationService();
 			var executor = new Executor(documentationService);
-			return new Cli(executor, documentationService);
+			var changeService = new ChangeService(new ChangeStore(), new PathResolver());
+			var argumentParser = new ArgumentParser(new CommandFactory(changeService));
+			return new Cli(executor, documentationService, argumentParser);
 		}
 	}
 }

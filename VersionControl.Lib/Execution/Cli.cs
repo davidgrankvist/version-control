@@ -7,16 +7,18 @@ namespace VersionControl.Lib.Execution
 	{
 		private readonly IDocumentationService documentationService;
 		private readonly IExecutor executor;
+		private readonly ArgumentParser argumentParser;
 
-		public Cli(IExecutor executor, IDocumentationService documentationService)
+		public Cli(IExecutor executor, IDocumentationService documentationService, ArgumentParser argumentParser)
 		{
 			this.documentationService = documentationService;
 			this.executor = executor;
+			this.argumentParser = argumentParser;
 		}
 
 		public void Run(string[] args)
 		{
-			var (command, helpMode) = ArgumentParser.Parse(args);
+			var (command, helpMode) = argumentParser.Parse(args);
 
 			if (command == null)
 			{

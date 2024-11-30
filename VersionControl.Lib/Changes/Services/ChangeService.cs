@@ -2,7 +2,7 @@
 
 namespace VersionControl.Lib.Changes.Services
 {
-	public class ChangeService
+	public class ChangeService : IChangeService
 	{
 		private readonly IChangeStore store;
 		private readonly IPathResolver pathResolver;
@@ -13,7 +13,7 @@ namespace VersionControl.Lib.Changes.Services
 			this.pathResolver = pathResolver;
 		}
 
-		public void SaveFiles(IReadOnlyCollection<string> filePaths)
+		public void Save(IReadOnlyCollection<string> filePaths)
 		{
 			var changes = new List<FileChange>();
 

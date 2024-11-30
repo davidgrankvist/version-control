@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
@@ -7,6 +8,7 @@ namespace VersionControl.Lib.Commands
 		public const string Name = "save";
 		private static readonly CommandDocumentation docs = new(Name, "Save changes.", "Save changes.");
 
+		private readonly IChangeService changeService;
 		private readonly IReadOnlyCollection<string> files;
 
 		public SaveCommand()
@@ -14,8 +16,9 @@ namespace VersionControl.Lib.Commands
 			files = [];
 		}
 
-		public SaveCommand(IReadOnlyCollection<string> files)
+		public SaveCommand(IChangeService changeService, IReadOnlyCollection<string> files)
 		{
+			this.changeService = changeService;
 			this.files = files;
 		}
 

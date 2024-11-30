@@ -1,9 +1,11 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
 	public class CompareCommand : IVersionControlCommand
 	{
+		private readonly IChangeService changeService;
 		private readonly string? fromChange;
 		private readonly string? toChange;
 
@@ -14,8 +16,9 @@ namespace VersionControl.Lib.Commands
 		{
 		}
 
-		public CompareCommand(string? fromChange, string? toChange)
+		public CompareCommand(IChangeService changeService, string? fromChange, string? toChange)
 		{
+			this.changeService = changeService;
 			this.fromChange = fromChange;
 			this.toChange = toChange;
 		}

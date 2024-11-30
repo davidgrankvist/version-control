@@ -2,9 +2,16 @@
 
 namespace VersionControl.Lib.Parsing
 {
-	public static class ArgumentParser
+	public class ArgumentParser
 	{
-		public static (IVersionControlCommand? Command, bool HelpMode) Parse(string[] args)
+		private readonly CommandFactory commandFactory;
+
+		public ArgumentParser(CommandFactory commandFactory)
+		{
+			this.commandFactory = commandFactory;
+		}
+
+		public (IVersionControlCommand? Command, bool HelpMode) Parse(string[] args)
 		{
 			IVersionControlCommand? command = null;
 			var helpMode = args.Any(s => s == "-h" || s == "--help");
@@ -15,19 +22,19 @@ namespace VersionControl.Lib.Parsing
 			switch (commandName)
 			{
 				case SaveCommand.Name:
-					command = new SaveCommand(args.Skip(1).ToArray().AsReadOnly());
+					command = commandFactory.CreateSaveCommand(args.Skip(1).ToArray().AsReadOnly());
 					break;
 				case HistoryCommand.Name:
-					command = new HistoryCommand();
+					command = commandFactory.CreateHistoryCommand();
 					break;
 				case StatusCommand.Name:
-					command = new StatusCommand();
+					command = commandFactory.CreateStatusCommand();
 					break;
 				case GotoCommand.Name:
-					command = new GotoCommand(firstArg);
+					command = commandFactory.CreateGotoCommand(firstArg);
 					break;
 				case CompareCommand.Name:
-					command = new CompareCommand(firstArg, secondArg);
+					command = commandFactory.CreateCompareCommand(firstArg, secondArg);
 					break;
 				default:
 					break;

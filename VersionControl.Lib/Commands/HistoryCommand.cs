@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
@@ -7,8 +8,15 @@ namespace VersionControl.Lib.Commands
 		public const string Name = "history";
 		private static readonly CommandDocumentation docs = new(Name, "View history.", "View history.");
 
+		private readonly IChangeService changeService;
+
 		public HistoryCommand()
 		{
+		}
+
+		public HistoryCommand(IChangeService changeService)
+		{
+			this.changeService = changeService;
 		}
 
 		public bool CanExecute()

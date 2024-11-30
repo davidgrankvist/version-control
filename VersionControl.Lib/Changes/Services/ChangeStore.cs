@@ -14,7 +14,7 @@ namespace VersionControl.Lib.Changes.Services
 			throw new NotImplementedException();
 		}
 
-		public FileSnapshot GetSnapshot(string file, string? changeId = null)
+		public FileSnapshot GetSnapshot(string filePath, string? changeId = null)
 		{
 			throw new NotImplementedException();
 		}

@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
@@ -7,8 +8,15 @@ namespace VersionControl.Lib.Commands
 		public const string Name = "status";
 		private static readonly CommandDocumentation docs = new(Name, "List changes.", "List changes.");
 
+		private readonly IChangeService changeService;
+
 		public StatusCommand()
 		{
+		}
+
+		public StatusCommand(IChangeService changeService)
+		{
+			this.changeService = changeService;
 		}
 
 		public bool CanExecute()

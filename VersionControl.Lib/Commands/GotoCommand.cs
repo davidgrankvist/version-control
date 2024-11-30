@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Documentation;
+﻿using VersionControl.Lib.Changes.Services;
+using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
@@ -9,12 +10,15 @@ namespace VersionControl.Lib.Commands
 		public const string Name = "goto";
 		private static readonly CommandDocumentation docs = new(Name, "Time travel.", "Move to a point in history.");
 
+		private readonly IChangeService changeService;
+
 		public GotoCommand()
 		{
 		}
 
-		public GotoCommand(string? change)
+		public GotoCommand(IChangeService changeService, string? change)
 		{
+			this.changeService = changeService;
 			this.change = change;
 		}
 
