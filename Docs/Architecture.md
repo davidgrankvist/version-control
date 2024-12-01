@@ -18,3 +18,9 @@ The history replays are expensive to perform, so we need a cache of snapshots. S
 2. a change layer index that maps change ID to changed file hashes
 
 The change layer itself can be delta compressed, so that we don't list all file hashes in every entry.
+
+## Detecting Changes
+
+Before we store the deltas, we need to detect which files to calculate the deltas for. Only a few files may have been edited, so calculating hashes for all of the files would be very inefficient.
+
+To deal with this problem, there is another cache: the file metadata cache. When a file is unpacked, its metadata such as last modified timestamp is stored. Later when the file tree is walked, only entries with updated metadata are considered updated.
