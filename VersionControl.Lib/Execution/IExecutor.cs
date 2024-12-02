@@ -2,8 +2,8 @@
 
 namespace VersionControl.Lib.Execution
 {
-	public interface IExecutor
-	{
-		void Execute(IVersionControlCommand command, bool helpMode = false);
-	}
+    public interface IExecutor
+    {
+        void Execute(IVersionControlCommand command, bool helpMode = false);
+    }
 }

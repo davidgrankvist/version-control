@@ -3,45 +3,45 @@ using VersionControl.Lib.Documentation;
 
 namespace VersionControl.Lib.Commands
 {
-	public class HistoryCommand : IVersionControlCommand
-	{
-		public const string Name = "history";
-		private static readonly CommandDocumentation docs = new(Name, "View history.", "View history.");
+    public class HistoryCommand : IVersionControlCommand
+    {
+        public const string Name = "history";
+        private static readonly CommandDocumentation docs = new(Name, "View history.", "View history.");
 
-		private readonly IChangeService changeService;
+        private readonly IChangeService changeService;
 
-		public HistoryCommand()
-		{
-		}
+        public HistoryCommand()
+        {
+        }
 
-		public HistoryCommand(IChangeService changeService)
-		{
-			this.changeService = changeService;
-		}
+        public HistoryCommand(IChangeService changeService)
+        {
+            this.changeService = changeService;
+        }
 
-		public bool CanExecute()
-		{
-			return false;
-		}
+        public bool CanExecute()
+        {
+            return false;
+        }
 
-		public void Execute()
-		{
-			throw new NotImplementedException();
-		}
+        public void Execute()
+        {
+            throw new NotImplementedException();
+        }
 
-		public CommandDocumentation Help()
-		{
-			return docs;
-		}
+        public CommandDocumentation Help()
+        {
+            return docs;
+        }
 
-		public override bool Equals(object? obj)
-		{
-			return obj is HistoryCommand;
-		}
+        public override bool Equals(object? obj)
+        {
+            return obj is HistoryCommand;
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

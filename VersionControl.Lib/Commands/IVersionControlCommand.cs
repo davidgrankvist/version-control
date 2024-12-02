@@ -2,12 +2,12 @@
 
 namespace VersionControl.Lib.Commands
 {
-	public interface IVersionControlCommand
-	{
-		void Execute();
+    public interface IVersionControlCommand
+    {
+        void Execute();
 
-		bool CanExecute();
+        bool CanExecute();
 
-		CommandDocumentation Help();
-	}
+        CommandDocumentation Help();
+    }
 }

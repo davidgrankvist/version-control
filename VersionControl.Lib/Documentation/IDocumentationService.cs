@@ -1,9 +1,9 @@
 ﻿namespace VersionControl.Lib.Documentation
 {
-	public interface IDocumentationService
-	{
-		void ShowCommandHelp(CommandDocumentation commandDoc);
+    public interface IDocumentationService
+    {
+        void ShowCommandHelp(CommandDocumentation commandDoc);
 
-		void ShowGeneralHelp();
-	}
+        void ShowGeneralHelp();
+    }
 }
