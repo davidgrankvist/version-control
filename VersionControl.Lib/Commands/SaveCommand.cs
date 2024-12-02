@@ -8,7 +8,7 @@ namespace VersionControl.Lib.Commands
 		public const string Name = "save";
 		private static readonly CommandDocumentation docs = new(Name, "Save changes.", "Save changes.");
 
-		private readonly IChangeService changeService;
+		private readonly IChangeService? changeService;
 		private readonly IReadOnlyCollection<string> files;
 
 		public SaveCommand()
@@ -24,12 +24,12 @@ namespace VersionControl.Lib.Commands
 
 		public bool CanExecute()
 		{
-			return false;
+			return files.Count > 0 && changeService != null;
 		}
 
 		public void Execute()
 		{
-			throw new NotImplementedException();
+			changeService!.Save(files);
 		}
 
 		public CommandDocumentation Help()

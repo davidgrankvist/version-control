@@ -1,8 +1,10 @@
-﻿namespace VersionControl.Lib.Changes.Services
+﻿using System.Text;
+
+namespace VersionControl.Lib.Changes.Services
 {
-	public static class Differ
+	public class Differ : IDiffer
 	{
-		public static FileChange CalculateChange(FileSnapshot prevSnapshot, FileSnapshot newSnapshot)
+		public FileChange CalculateChange(FileSnapshot prevSnapshot, FileSnapshot newSnapshot)
 		{
 			throw new NotImplementedException();
 		}

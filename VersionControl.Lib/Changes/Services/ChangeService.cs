@@ -6,11 +6,13 @@ namespace VersionControl.Lib.Changes.Services
 	{
 		private readonly IChangeStore store;
 		private readonly IPathResolver pathResolver;
+		private readonly IDiffer differ;
 
-		public ChangeService(IChangeStore store, IPathResolver pathResolver)
+		public ChangeService(IChangeStore store, IPathResolver pathResolver, IDiffer differ)
 		{
 			this.store = store;
 			this.pathResolver = pathResolver;
+			this.differ = differ;
 		}
 
 		public void Save(IReadOnlyCollection<string> filePaths)
@@ -20,7 +22,7 @@ namespace VersionControl.Lib.Changes.Services
 			var resolvedFilePaths = pathResolver.Resolve(filePaths);
 			var currentChangeId = store.GetCurrentChangeId();
 
-			foreach (var filePath in filePaths)
+			foreach (var filePath in resolvedFilePaths)
 			{
 				var change = GetChange(filePath, currentChangeId);
 				changes.Add(change);
@@ -35,7 +37,7 @@ namespace VersionControl.Lib.Changes.Services
 			var prevSnapshot = store.GetSnapshot(filePath, currentChangeId);
 			var newSnapshot = store.GetSnapshot(filePath);
 
-			var change = Differ.CalculateChange(prevSnapshot, newSnapshot);
+			var change = differ.CalculateChange(prevSnapshot, newSnapshot);
 			return change;
 		}
 	}
