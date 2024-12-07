@@ -1,6 +1,4 @@
-﻿using Microsoft.Testing.Platform.Extensions.Messages;
-
-using VersionControl.Lib.Changes;
+﻿using VersionControl.Lib.Changes;
 using VersionControl.Test.TestHelpers;
 
 namespace VersionControl.Test.DiffCalculationTests;
@@ -8,19 +6,11 @@ namespace VersionControl.Test.DiffCalculationTests;
 using Ldo = LineDiffOperation;
 using Tw = TestSerializationWrapper<List<LineDiffOperation>>;
 
-public static class InverseLcsDiffCalculatorTestDataHelper
+public static class DiffOperationTestHelper
 {
-    public static IEnumerable<object[]> GetTestCases()
+    public static List<(string[] First, string[] Second, Tw Operations)> GetAddRemoveTestCases()
     {
-        foreach (var testCase in GetTestCasesInternal())
-        {
-            yield return new object[] { testCase.First, testCase.Second, testCase.Expected };
-        }
-    }
-
-    private static List<(string[] First, string[] Second, Tw Expected)> GetTestCasesInternal()
-    {
-        List<(string[] First, string[] Second, List<Ldo> Expected)> testCases = [
+        List<(string[] First, string[] Second, List<Ldo> Operations)> testCases = [
             // no diff
             ([], [], []),
             (["A"], ["A"], []),
@@ -46,6 +36,16 @@ public static class InverseLcsDiffCalculatorTestDataHelper
             (["A", "B", "C"], ["X", "B", "Y"], [Ldo.Removal(0, 0), Ldo.Removal(1, 1), Ldo.Addition(0, 0, ["X"]), Ldo.Addition(2, 2, ["Y"])]),
             ];
 
-        return testCases.Select(x => (x.First, x.Second, new Tw(x.Expected))).ToList();
+        return testCases.Select(x => (x.First, x.Second, new Tw(x.Operations))).ToList();
+    }
+
+    public static List<LineDiffOperation> DeserializeOperations(TestSerializationWrapper<List<LineDiffOperation>> expected)
+    {
+        return expected.Data.Select(Listify).ToList();
+    }
+
+    private static LineDiffOperation Listify(LineDiffOperation operation)
+    {
+        return new LineDiffOperation(operation.OperationType, operation.Start, operation.End, operation.Data.ToList());
     }
 }

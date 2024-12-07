@@ -8,22 +8,20 @@ namespace VersionControl.Test.DiffCalculationTests;
 public class InverseLcsDiffCalculatorTest
 {
     [DataTestMethod]
-    [DynamicData(nameof(InverseLcsDiffCalculatorTestDataHelper.GetTestCases), typeof(InverseLcsDiffCalculatorTestDataHelper), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetTestCases), DynamicDataSourceType.Method)]
     public void ShouldCalculateExpectedDiff(string[] first, string[] second, TestSerializationWrapper<List<LineDiffOperation>> expected)
     {
-        var expectedData = Deserialize(expected);
+        var expectedData = DiffOperationTestHelper.DeserializeOperations(expected);
         var operations = InverseLcsDiffCalculator.CalculateDiff(first, second);
 
         Assert.IsTrue(expectedData.SequenceEqual(operations));
     }
 
-    private static List<LineDiffOperation> Deserialize(TestSerializationWrapper<List<LineDiffOperation>> expected)
+    public static IEnumerable<object[]> GetTestCases()
     {
-        return expected.Data.Select(Listify).ToList();
-    }
-
-    private static LineDiffOperation Listify(LineDiffOperation operation)
-    {
-        return new LineDiffOperation(operation.OperationType, operation.Start, operation.End, operation.Data.ToList());
+        foreach (var testCase in DiffOperationTestHelper.GetAddRemoveTestCases())
+        {
+            yield return new object[] { testCase.First, testCase.Second, testCase.Operations };
+        }
     }
 }

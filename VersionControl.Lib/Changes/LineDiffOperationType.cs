@@ -1,6 +1,6 @@
 ﻿namespace VersionControl.Lib.Changes;
 public enum LineDiffOperationType
 {
-    Add,
+    Add = 0,
     Remove,
 }
