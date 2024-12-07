@@ -5,14 +5,14 @@
     /// </summary>
     public static class LcsCalculator
     {
-        public static string[] FindLcs(string[] first, string[] second)
+        public static (int FirstIndex, int SecondIndex)[] FindLcsIndices(string[] first, string[] second)
         {
             // Step 1. Calculate LCS of all leading substrings
             var lcs = FindLcsLengthOfSubStrings(first, second);
             var lcsLength = lcs[first.Length, second.Length];
 
             // Step 2. Start in the bottom right corner of the result matrix and backtrack the maximum path
-            var result = new string[lcsLength];
+            var result = new (int, int)[lcsLength];
             var i = first.Length;
             var j = second.Length;
             var iResult = lcsLength - 1;
@@ -20,7 +20,7 @@
             {
                 if (first[i - 1] == second[j - 1])
                 {
-                    result[iResult] = first[i - 1];
+                    result[iResult] = (i - 1, j - 1);
                     i--;
                     j--;
                     iResult--;
@@ -33,6 +33,21 @@
                 {
                     j--;
                 }
+            }
+
+            return result;
+        }
+
+        public static string[] FindLcs(string[] first, string[] second)
+        {
+            var lcsIndices = FindLcsIndices(first, second);
+            var lcsLength = lcsIndices.Length;
+            var result = new string[lcsLength];
+
+            for (var i = 0; i < lcsLength; i++)
+            {
+                var iContent = lcsIndices[i].FirstIndex;
+                result[i] = first[iContent];
             }
 
             return result;

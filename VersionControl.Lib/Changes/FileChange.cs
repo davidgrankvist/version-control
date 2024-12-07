@@ -6,9 +6,9 @@
 
         public string FilePath { get; }
 
-        public IReadOnlyCollection<LineChange> LineChanges { get; }
+        public IReadOnlyCollection<LineDiffOperation> LineChanges { get; }
 
-        public FileChange(FileChangeEvent fileChangeEvent, string filePath, IReadOnlyCollection<LineChange> lineChanges)
+        public FileChange(FileChangeEvent fileChangeEvent, string filePath, IReadOnlyCollection<LineDiffOperation> lineChanges)
         {
             Event = fileChangeEvent;
             FilePath = filePath;
