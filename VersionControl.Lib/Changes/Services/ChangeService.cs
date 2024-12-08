@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Storage;
+﻿using VersionControl.Lib.Changes.Services.Storage;
+using VersionControl.Lib.Storage;
 
 namespace VersionControl.Lib.Changes.Services
 {
@@ -35,7 +36,7 @@ namespace VersionControl.Lib.Changes.Services
         private FileChange GetChange(string filePath, string currentChangeId)
         {
             var prevSnapshot = store.GetSnapshot(filePath, currentChangeId);
-            var newSnapshot = store.GetSnapshot(filePath);
+            var newSnapshot = store.GetImmediateSnapShot(filePath);
 
             var change = differ.CalculateChange(prevSnapshot, newSnapshot);
             return change;

@@ -14,5 +14,19 @@
             FilePath = filePath;
             LineChanges = lineChanges;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not FileChange fc)
+            {
+                return false;
+            }
+            return Event == fc.Event && FilePath == fc.FilePath && LineChanges.SequenceEqual(fc.LineChanges);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Event, FilePath, LineChanges.ToArray());
+        }
     }
 }
