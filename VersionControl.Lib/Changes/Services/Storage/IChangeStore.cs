@@ -4,9 +4,9 @@ namespace VersionControl.Lib.Changes.Services.Storage
 {
     public interface IChangeStore
     {
-        void Save(ChangeSet changeSet);
+        string Save(ChangeSet changeSet);
 
-        ChangeSet GetChange(string changeId);
+        IReadOnlyCollection<ChangeSet> GetHistory(string? fromChangeId = null, string? toChangeId = null);
 
         /// <summary>
         /// Retrieve file contents at a given point in history.

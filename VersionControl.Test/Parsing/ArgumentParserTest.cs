@@ -1,7 +1,7 @@
 ﻿using VersionControl.Lib.Commands;
 using VersionControl.Lib.Parsing;
+using VersionControl.Test.Framework;
 using VersionControl.Test.Mocks;
-using VersionControl.Test.TestHelpers;
 
 namespace VersionControl.Test.Parsing
 {

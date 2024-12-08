@@ -11,6 +11,10 @@ public class FileManager : IFileManager
     {
         return File.OpenRead(path);
     }
+    public Stream Write(string path)
+    {
+        return File.OpenWrite(path);
+    }
 
     public Stream Append(string path)
     {

@@ -5,5 +5,7 @@ public interface IFileManager
 
     byte[] ReadAllBytes(string path);
 
+    Stream Write(string path);
+
     Stream Append(string path);
 }

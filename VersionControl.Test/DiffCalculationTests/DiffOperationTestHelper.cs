@@ -1,5 +1,5 @@
 ﻿using VersionControl.Lib.Changes;
-using VersionControl.Test.TestHelpers;
+using VersionControl.Test.Framework;
 
 namespace VersionControl.Test.DiffCalculationTests;
 

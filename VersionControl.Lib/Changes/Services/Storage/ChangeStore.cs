@@ -21,14 +21,47 @@ namespace VersionControl.Lib.Changes.Services.Storage
             this.fileManager = fileManager;
         }
 
-        public void Save(ChangeSet changeSet)
+        public string Save(ChangeSet changeSet)
         {
-            throw new NotImplementedException();
+            /*
+             * Simple file updates with no backup management for now:
+             *
+             * 1. append to log
+             * 2. append to index
+             * 3. update state
+             */
+
+            var changeId = Guid.NewGuid().ToString();
+
+            using (var logStream = fileManager.Append(LogPath))
+            using (var indexStream = fileManager.Append(LogIndexPath))
+            using (var stateStream = fileManager.Write(StatePath))
+            {
+                var offset = ChangeLogFileManager.Append(logStream, changeSet);
+                ChangeLogIndexFileManager.Append(indexStream, changeId, offset);
+                VersionControlStateFileManager.WriteState(stateStream, new VersionControlState(changeId));
+            }
+
+            return changeId;
         }
 
-        public ChangeSet GetChange(string changeId)
+        public IReadOnlyCollection<ChangeSet> GetHistory(string? fromChangeId = null, string? toChangeId = null)
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<ChangeSet> changes = [];
+            using (var indexStream = fileManager.ReadFile(LogIndexPath))
+            using (var indexSecondaryStream = fileManager.ReadFile(LogIndexPath))
+            using (var logStream = fileManager.ReadFile(LogPath))
+            {
+                var startOffset = fromChangeId == null ? 0 : ChangeLogIndexFileManager.ParseIndex(indexStream, fromChangeId);
+                var endOffset = toChangeId == null ? long.MaxValue : 
+                    (fromChangeId == toChangeId ? startOffset : ChangeLogIndexFileManager.ParseIndex(indexSecondaryStream, toChangeId));
+                if (startOffset != -1 && endOffset != -1)
+                {
+                    changes = ChangeLogFileManager.ParseLog(logStream, startOffset, endOffset);
+                }
+            }
+
+            return changes;
         }
 
         public FileSnapshot GetSnapshot(string filePath, string changeId)
@@ -40,17 +73,7 @@ namespace VersionControl.Lib.Changes.Services.Storage
              * 3. replay
              */
 
-            IReadOnlyCollection<ChangeSet> changes;
-            using (var indexStream = fileManager.ReadFile(LogIndexPath))
-            using (var logStream = fileManager.ReadFile(LogPath))
-            {
-                var logOffset = ChangeLogIndexFileManager.ParseIndex(logStream, changeId);
-                if (logOffset == -1)
-                {
-                    throw new InvalidOperationException($"Unable to find offset for change {changeId}");
-                }
-                changes = ChangeLogFileManager.ParseLog(logStream, logOffset);
-            }
+            var changes = GetHistory(null, changeId);
             var fileChanges = changes
                 .SelectMany(c => c.FileChanges)
                 .Where(fc => fc.FilePath == filePath)
@@ -70,7 +93,14 @@ namespace VersionControl.Lib.Changes.Services.Storage
 
         public string GetCurrentChangeId()
         {
-            throw new NotImplementedException();
+            var changeId = string.Empty;
+            using (var stream = fileManager.ReadFile(StatePath))
+            {
+                var state = VersionControlStateFileManager.ParseState(stream);
+                changeId = state.CurrentChangeId;
+            }
+
+            return changeId;
         }
     }
 }

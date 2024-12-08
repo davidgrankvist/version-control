@@ -8,7 +8,7 @@ public static class ChangeLogFileManager
         var changesets = new List<ChangeSet>();
         using (var reader = new BinaryReader(stream))
         {
-            var end = Math.Min(stream.Length, toOffset + 1);
+            var end = Math.Min(stream.Length, toOffset == long.MaxValue ? toOffset : toOffset + 1);
             reader.BaseStream.Position = fromOffset;
 
             while (reader.BaseStream.Position < end)

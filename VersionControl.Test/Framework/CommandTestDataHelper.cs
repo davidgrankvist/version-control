@@ -1,7 +1,7 @@
 ﻿using VersionControl.Lib.Commands;
 using VersionControl.Test.Mocks;
 
-namespace VersionControl.Test.TestHelpers
+namespace VersionControl.Test.Framework
 {
     using CommandWrapper = TestSerializationWrapper<IVersionControlCommand>;
 

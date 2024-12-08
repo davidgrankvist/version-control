@@ -1,9 +1,9 @@
 ﻿using VersionControl.Lib.Changes;
 using VersionControl.Lib.Changes.Services.ChangeLogs;
 using VersionControl.Lib.Storage;
-using VersionControl.Test.Storage.FakeFiles;
+using VersionControl.Test.Framework.FakeFiles;
 
-namespace VersionControl.Test.Storage;
+namespace VersionControl.Test.Mocks;
 
 [TestClass]
 public class ChangeLogFileManagerTest
@@ -20,9 +20,9 @@ public class ChangeLogFileManagerTest
 
         var file = new AppendableFakeFile();
         var offsets = new List<long>();
-        var appendStream = file.Append();
         foreach (var change in data)
         {
+            var appendStream = file.Write();
             var offset = ChangeLogFileManager.Append(appendStream, change);
             offsets.Add(offset);
         }

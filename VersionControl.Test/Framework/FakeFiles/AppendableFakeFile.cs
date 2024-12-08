@@ -1,24 +1,27 @@
-﻿namespace VersionControl.Test.Storage.FakeFiles;
+﻿namespace VersionControl.Test.Framework.FakeFiles;
 
 /// <summary>
 /// Memory stream wrapper to simulate an append-only file.
 /// </summary>
-public class AppendableFakeFile
+public class AppendableFakeFile : IFakeFile
 {
     private NoCloseMemoryStream stream;
     private List<byte[]> appended = [];
     private byte[] buffer;
     private bool isDirty;
 
-    public Stream Append()
+    public Stream Write()
     {
-        stream = new NoCloseMemoryStream();
+        if (stream == null)
+        {
+            stream = new NoCloseMemoryStream();
+        }
         return stream;
     }
 
     public void CollectAppended()
     {
-        var toCollect = stream.GetBuffer().Take((int)stream.Position).ToArray();
+        var toCollect = stream.Collect();
         appended.Add(toCollect);
         isDirty = true;
     }
@@ -37,5 +40,10 @@ public class AppendableFakeFile
     public Stream Read()
     {
         return new MemoryStream(GetBuffer());
+    }
+
+    public byte[] ReadAllBytes()
+    {
+        return GetBuffer();
     }
 }

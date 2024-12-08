@@ -1,5 +1,5 @@
 ﻿using VersionControl.Lib.Changes.Services.Storage;
-using VersionControl.Test.Storage.FakeFiles;
+using VersionControl.Test.Framework.FakeFiles;
 
 namespace VersionControl.Test.Storage;
 
@@ -19,10 +19,10 @@ public partial class ChangeLogIndexFileManagerTest
         var file = new AppendableFakeFile();
         foreach (var item in data)
         {
-            var appendStream = file.Append();
+            var appendStream = file.Write();
             ChangeLogIndexFileManager.Append(appendStream, item.Id.ToString(), item.Offset);
-            file.CollectAppended();
         }
+        file.CollectAppended();
 
         foreach (var item in data)
         {

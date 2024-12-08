@@ -1,6 +1,6 @@
 ﻿using VersionControl.Lib.Changes;
 using VersionControl.Lib.Changes.Services.DiffCalculations;
-using VersionControl.Test.TestHelpers;
+using VersionControl.Test.Framework;
 
 namespace VersionControl.Test.DiffCalculationTests;
 

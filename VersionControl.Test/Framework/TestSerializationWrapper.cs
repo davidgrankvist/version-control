@@ -1,4 +1,4 @@
-﻿namespace VersionControl.Test.TestHelpers
+﻿namespace VersionControl.Test.Framework
 {
     /// <summary>
     /// This is a workaround to make data driven test work. MsTest needs to serialize the objects.
