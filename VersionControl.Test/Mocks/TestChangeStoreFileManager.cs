@@ -66,13 +66,4 @@ public class TestChangeStoreFileManager : IFileManager
 
         return file;
     }
-
-    /// <summary>
-    /// Ensure that appended data is ready for reading.
-    /// </summary>
-    public void CollectAppended()
-    {
-        log.CollectAppended();
-        logIndex.CollectAppended();
-    }
 }

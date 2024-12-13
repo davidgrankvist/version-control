@@ -22,7 +22,6 @@ public partial class ChangeLogIndexFileManagerTest
             var appendStream = file.Write();
             ChangeLogIndexFileManager.Append(appendStream, item.Id.ToString(), item.Offset);
         }
-        file.CollectAppended();
 
         foreach (var item in data)
         {

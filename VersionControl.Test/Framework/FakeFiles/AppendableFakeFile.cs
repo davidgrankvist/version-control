@@ -5,10 +5,7 @@
 /// </summary>
 public class AppendableFakeFile : IFakeFile
 {
-    private NoCloseMemoryStream stream;
-    private List<byte[]> appended = [];
-    private byte[] buffer;
-    private bool isDirty;
+    private NoCloseMemoryStream? stream;
 
     public Stream Write()
     {
@@ -19,22 +16,9 @@ public class AppendableFakeFile : IFakeFile
         return stream;
     }
 
-    public void CollectAppended()
-    {
-        var toCollect = stream.Collect();
-        appended.Add(toCollect);
-        isDirty = true;
-    }
-
     private byte[] GetBuffer()
     {
-        if (isDirty)
-        {
-            buffer = appended.ToArray().Aggregate((first, second) => first.Concat(second).ToArray());
-            isDirty = false;
-        }
-
-        return buffer;
+        return stream!.Collect();
     }
 
     public Stream Read()

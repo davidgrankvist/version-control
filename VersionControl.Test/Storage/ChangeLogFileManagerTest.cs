@@ -26,7 +26,6 @@ public class ChangeLogFileManagerTest
             var offset = ChangeLogFileManager.Append(appendStream, change);
             offsets.Add(offset);
         }
-        file.CollectAppended();
 
         for (var i = 0; i < data.Count; i++)
         {

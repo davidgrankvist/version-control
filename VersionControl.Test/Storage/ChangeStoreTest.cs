@@ -43,7 +43,6 @@ public class ChangeStoreTest
         var change = CreateAddOneLineChanges(filePath, lines).First();
 
         store.Save(change);
-        fileManager.CollectAppended();
         var result = store.GetHistory().FirstOrDefault();
 
         Assert.AreEqual(change, result);
@@ -57,7 +56,6 @@ public class ChangeStoreTest
         var change = CreateAddOneLineChanges(filePath, lines).First();
 
         var changeId = store.Save(change);
-        fileManager.CollectAppended();
         var result = store.GetHistory(changeId, changeId).FirstOrDefault();
 
         Assert.AreEqual(change, result);
@@ -139,7 +137,6 @@ public class ChangeStoreTest
             var changeId = store.Save(change);
             changeIds.Add(changeId);
         }
-        fileManager.CollectAppended();
 
         return changeIds;
     }
