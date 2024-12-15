@@ -6,7 +6,7 @@ namespace VersionControl.Lib.Changes.Services.Storage
     {
         string Save(ChangeSet changeSet);
 
-        IReadOnlyCollection<ChangeSet> GetHistory(string? fromChangeId = null, string? toChangeId = null);
+        IReadOnlyCollection<ChangeWrapper> GetHistory(string? fromChangeId, string? toChangeId, bool withDiffs = true);
 
         /// <summary>
         /// Retrieve file contents at a given point in history.

@@ -1,4 +1,5 @@
-﻿using VersionControl.Lib.Commands;
+﻿using VersionControl.Lib.Changes;
+using VersionControl.Lib.Commands;
 
 namespace VersionControl.Lib.Parsing
 {
@@ -25,7 +26,7 @@ namespace VersionControl.Lib.Parsing
                     command = ParseSaveCommand(args);
                     break;
                 case HistoryCommand.Name:
-                    command = commandFactory.CreateHistoryCommand();
+                    command = ParseHistoryCommand(args);
                     break;
                 case StatusCommand.Name:
                     command = commandFactory.CreateStatusCommand();
@@ -72,6 +73,46 @@ namespace VersionControl.Lib.Parsing
             return commandFactory.CreateSaveCommand(files, msg);
         }
 
+        // TODO(refactor): use generic arg parsing instead of multiple specific, similar ones..
+        private IVersionControlCommand ParseHistoryCommand(string[] args)
+        {
+            IReadOnlyCollection<string> files = Array.Empty<string>();
+            string? fromChangeId = null;
+            string? toChangeId = null;
+            HistoryQueryFormat format = HistoryQueryFormat.Compact;
+
+            var commandArgs = args.Skip(1).Where(s => !IsHelpArg(s)).ToList();
+            var iFmt = commandArgs.FindIndex(IsFormatArg);
+
+            if (iFmt == -1) // no format provided
+            {
+                fromChangeId = commandArgs.Count > 0 ? commandArgs[0] : null;
+                toChangeId = commandArgs.Count > 1 ? commandArgs[1] : null;
+            }
+            else if (iFmt == commandArgs.Count - 1) // format arg given, but no value
+            {
+                var rem = commandArgs.Take(iFmt).ToList();
+
+                fromChangeId = rem.Count > 0 ? rem[0] : null;
+                toChangeId = rem.Count > 1 ? rem[1] : null;
+            }
+            else // format was provided
+            {
+                var iFmtContent = iFmt + 1;
+                var fmtStr = commandArgs[iFmtContent];
+
+                var argsPart1 = commandArgs.Take(iFmt);
+                var argsPart2 = commandArgs.Skip(iFmtContent + 1);
+                var rem = argsPart1.Concat(argsPart2).ToList();
+
+                fromChangeId = rem.Count > 0 ? rem[0] : null;
+                toChangeId = rem.Count > 1 ? rem[1] : null;
+                format = ParseFormat(fmtStr);
+            }
+
+            return commandFactory.CreateHistoryCommand(new HistoryQuery(fromChangeId, toChangeId, format));
+        }
+
         private static bool IsHelpArg(string arg)
         {
             return arg == "-h" || arg == "--help";
@@ -80,6 +121,25 @@ namespace VersionControl.Lib.Parsing
         private static bool IsMessageArg(string arg)
         {
             return arg == "-m" || arg == "--message";
+        }
+
+        private static bool IsFormatArg(string arg)
+        {
+            return arg == "-f" || arg == "--format";
+        }
+
+        private static HistoryQueryFormat ParseFormat(string arg)
+        {
+            HistoryQueryFormat fmt;
+            switch (arg)
+            {
+                case "compact":
+                    fmt = HistoryQueryFormat.Compact;
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unknown history format: {arg}");
+            }
+            return fmt;
         }
     }
 }

@@ -3,9 +3,9 @@
 namespace VersionControl.Lib.Changes.Services.ChangeLogs;
 public static class ChangeLogFileManager
 {
-    public static IReadOnlyCollection<ChangeSet> ParseLog(Stream stream, long fromOffset = 0, long toOffset = long.MaxValue)
+    public static IReadOnlyCollection<ChangeWrapper> ParseLog(Stream stream, long fromOffset = 0, long toOffset = long.MaxValue)
     {
-        var changesets = new List<ChangeSet>();
+        var changesets = new List<ChangeWrapper>();
         using (var reader = new BinaryReader(stream))
         {
             var end = Math.Min(stream.Length, toOffset == long.MaxValue ? toOffset : toOffset + 1);
@@ -21,10 +21,12 @@ public static class ChangeLogFileManager
         return changesets;
     }
 
-    private static ChangeSet ParseChangeSet(BinaryReader reader)
+    private static ChangeWrapper ParseChangeSet(BinaryReader reader)
     {
         var fileChanges = new List<FileChange>();
 
+        var idBytes = reader.ReadBytes(16);
+        var id = new Guid(idBytes).ToString();
         var message = reader.ReadString();
         var numFileChanges = reader.ReadInt32();
         for (var i = 0; i < numFileChanges; i++)
@@ -33,7 +35,8 @@ public static class ChangeLogFileManager
             fileChanges.Add(fileChange);
         }
 
-        return new ChangeSet(fileChanges, message);
+        var change = new ChangeSet(fileChanges, message);
+        return new ChangeWrapper(id, change);
     }
 
     private static FileChange ParseFileChange(BinaryReader reader)
@@ -71,22 +74,24 @@ public static class ChangeLogFileManager
         return new LineDiffOperation(opType, start, end, lines);
     }
 
-    public static long Append(Stream stream, ChangeSet changeSet)
+    public static long Append(Stream stream, ChangeSet changeSet, string changeId)
     {
         var result = -1L;
         using (var writer = new BinaryWriter(stream))
         {
             writer.BaseStream.Position = stream.Length;
             result = writer.BaseStream.Position;
-            WriteChangeSet(writer, changeSet);
+            WriteChangeSet(writer, changeSet, changeId);
         }
 
         return result;
     }
 
-    private static void WriteChangeSet(BinaryWriter writer, ChangeSet changeSet)
+    private static void WriteChangeSet(BinaryWriter writer, ChangeSet changeSet, string changeId)
     {
+        var idBytes = Guid.Parse(changeId).ToByteArray();
         var numFileChanges = changeSet.FileChanges.Count;
+        writer.Write(idBytes);
         writer.Write(changeSet.Message);
         writer.Write(numFileChanges);
 

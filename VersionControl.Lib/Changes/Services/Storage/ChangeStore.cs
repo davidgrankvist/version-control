@@ -37,7 +37,7 @@ namespace VersionControl.Lib.Changes.Services.Storage
             using (var indexStream = fileManager.Append(LogIndexPath))
             using (var stateStream = fileManager.Write(StatePath))
             {
-                var offset = ChangeLogFileManager.Append(logStream, changeSet);
+                var offset = ChangeLogFileManager.Append(logStream, changeSet, changeId);
                 ChangeLogIndexFileManager.Append(indexStream, changeId, offset);
                 VersionControlStateFileManager.WriteState(stateStream, new VersionControlState(changeId));
             }
@@ -45,9 +45,9 @@ namespace VersionControl.Lib.Changes.Services.Storage
             return changeId;
         }
 
-        public IReadOnlyCollection<ChangeSet> GetHistory(string? fromChangeId = null, string? toChangeId = null)
+        public IReadOnlyCollection<ChangeWrapper> GetHistory(string? fromChangeId = null, string? toChangeId = null, bool withDiffs = true)
         {
-            IReadOnlyCollection<ChangeSet> changes = [];
+            IReadOnlyCollection<ChangeWrapper> changes = [];
             using (var indexStream = fileManager.ReadFile(LogIndexPath))
             using (var indexSecondaryStream = fileManager.ReadFile(LogIndexPath))
             using (var logStream = fileManager.ReadFile(LogPath))
@@ -59,6 +59,12 @@ namespace VersionControl.Lib.Changes.Services.Storage
                 {
                     changes = ChangeLogFileManager.ParseLog(logStream, startOffset, endOffset);
                 }
+            }
+
+            // naive not at all optimized filter - remove diffs after retrieving them
+            if (!withDiffs)
+            {
+                changes = changes.Select(c => new ChangeWrapper(c.Id, new ChangeSet([], c.Change.Message))).ToList();
             }
 
             return changes;
@@ -75,7 +81,7 @@ namespace VersionControl.Lib.Changes.Services.Storage
 
             var changes = GetHistory(null, changeId);
             var fileChanges = changes
-                .SelectMany(c => c.FileChanges)
+                .SelectMany(c => c.Change.FileChanges)
                 .Where(fc => fc.FilePath == filePath)
                 .SelectMany(fc => fc.LineChanges).ToList();
 

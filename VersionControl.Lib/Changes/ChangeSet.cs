@@ -4,6 +4,8 @@ namespace VersionControl.Lib.Storage
 {
     public class ChangeSet
     {
+        public string Id { get; }
+
         public string Message { get; }
 
         public IReadOnlyCollection<FileChange> FileChanges { get; }

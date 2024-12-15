@@ -41,5 +41,24 @@ namespace VersionControl.Lib.Changes.Services
             var change = differ.CalculateChange(prevSnapshot, newSnapshot);
             return change;
         }
+
+        public IReadOnlyCollection<ChangeWrapper> GetHistory(HistoryQuery query)
+        {
+            return store.GetHistory(query.FromChangeId, query.ToChangeId, ShouldIncludeDiffs(query.Format));
+        }
+
+        private static bool ShouldIncludeDiffs(HistoryQueryFormat fmt)
+        {
+            bool shouldIncludeDiffs = false;
+            switch (fmt)
+            {
+                case HistoryQueryFormat.Compact:
+                    shouldIncludeDiffs = false;
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown history format");
+            }
+            return shouldIncludeDiffs;
+        }
     }
 }

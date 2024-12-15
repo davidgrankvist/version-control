@@ -45,7 +45,8 @@ public class ChangeStoreTest
         store.Save(change);
         var result = store.GetHistory().FirstOrDefault();
 
-        Assert.AreEqual(change, result);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(change, result.Change);
     }
 
     [TestMethod]
@@ -58,7 +59,8 @@ public class ChangeStoreTest
         var changeId = store.Save(change);
         var result = store.GetHistory(changeId, changeId).FirstOrDefault();
 
-        Assert.AreEqual(change, result);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(change, result.Change);
     }
 
     [TestMethod]
@@ -69,7 +71,7 @@ public class ChangeStoreTest
         var changes = CreateAddOneLineChanges(filePath, lines);
 
         SaveAll(changes);
-        var result = store.GetHistory();
+        var result = store.GetHistory().Select(c => c.Change);
 
         Assert.IsTrue(changes.SequenceEqual(result));
     }
@@ -88,7 +90,8 @@ public class ChangeStoreTest
             var result = store.GetHistory(changeId, changeId).FirstOrDefault();
             var change = changes[i];
 
-            Assert.AreEqual(change, result);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(change, result.Change);
         }
     }
 
@@ -110,7 +113,7 @@ public class ChangeStoreTest
         Assert.AreEqual(numChanges, result.Count);
         for (var i = 0; i < numChanges ; i++)
         {
-            Assert.AreEqual(changesArr[i + fromIndex], resultArr[i]);
+            Assert.AreEqual(changesArr[i + fromIndex], resultArr[i].Change);
         }
     }
 
@@ -127,6 +130,20 @@ public class ChangeStoreTest
         var result = store.GetSnapshot(expected.FilePath, changeId.ToString());
 
         Assert.AreEqual(expected, result);
+    }
+
+    [TestMethod]
+    public void ShouldRetrieveHistoryWithoutDiffs()
+    {
+        var filePath = "some_file.txt";
+        string[] lines = ["1", "2", "3", "4"];
+        var changes = CreateAddOneLineChanges(filePath, lines);
+        var changesWithoutDiffs = changes.Select(c => new ChangeSet([], c.Message));
+
+        SaveAll(changes);
+        var result = store.GetHistory(null, null, false).Select(c => c.Change);
+
+        Assert.IsTrue(changesWithoutDiffs.SequenceEqual(result));
     }
 
     private List<string> SaveAll(IReadOnlyCollection<ChangeSet> changes)

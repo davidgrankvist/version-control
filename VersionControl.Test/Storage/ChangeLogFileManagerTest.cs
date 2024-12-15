@@ -23,7 +23,7 @@ public class ChangeLogFileManagerTest
         foreach (var change in data)
         {
             var appendStream = file.Write();
-            var offset = ChangeLogFileManager.Append(appendStream, change);
+            var offset = ChangeLogFileManager.Append(appendStream, change, Guid.NewGuid().ToString());
             offsets.Add(offset);
         }
 
@@ -34,7 +34,7 @@ public class ChangeLogFileManagerTest
             var parsed = ChangeLogFileManager.ParseLog(file.Read(), offset, offset);
 
             Assert.AreEqual(1, parsed.Count);
-            Assert.AreEqual(change, parsed.First());
+            Assert.AreEqual(change, parsed.First().Change);
         }
     }
 
