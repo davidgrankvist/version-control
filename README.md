@@ -26,3 +26,7 @@ status  - List changes.
 ### Architecture
 
 See [Archicture.md](Docs/Architecture.md).
+
+### Development
+
+See [Development.md](Docs/Development.md).

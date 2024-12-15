@@ -1,10 +1,19 @@
 # Architecture
 
-The general idea is that each change is stored as a delta. To reach one point in history, you need to replay the events. This can be optimized with snapshots.
+Here are some notes on the architecture. Enjoy.
+
+## Structure
+
+This is the general idea:
+- the argument parser parses arguments into commands
+- commands encapsulate their own behavior and documentation
+- the executor executes commands and outputs either results or documentation
+
+The commands have access to additional services that handle the heavy lifting, for example storage and diff calculations.
 
 ## Storage
 
-The storage is a mixture of change logs, index files and caches.
+The general idea is that each change is stored as a delta. To reach one point in history, you need to replay the events. This can be optimized with snapshots.
 
 ### Primary storage
 
@@ -38,3 +47,11 @@ The delta is represented as a series of operations to transform a file, for exam
 The first part is solved by finding the [Longest Common Subsequence (LCS)](https://en.wikipedia.org/wiki/Longest_common_subsequence). When the LCS is removed from the old and new versions of the file, then what remains is the delta.
 
 The second part can be solved naively by treating the remainder of the old file as removals and the remainder of the new file as additions.
+
+## Testing Strategy
+
+One project goal is to make the system easy to test, all the way from argument parsing down to file storage.
+
+### I/O
+
+I/O operations are abstracted behind interfaces so that they can be simulated with in-memory streams. For example, the interaction of change log, index and state files can be tested using simulated I/O.
