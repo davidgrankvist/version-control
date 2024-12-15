@@ -97,9 +97,13 @@ namespace VersionControl.Lib.Changes.Services.Storage
             return new FileSnapshot(filePath, bytes);
         }
 
-        public string GetCurrentChangeId()
+        public string? GetCurrentChangeId()
         {
-            var changeId = string.Empty;
+            string? changeId = null;
+            if (!fileManager.Exists(StatePath))
+            {
+                return changeId;
+            }
             using (var stream = fileManager.ReadFile(StatePath))
             {
                 var state = VersionControlStateFileManager.ParseState(stream);

@@ -18,6 +18,6 @@ namespace VersionControl.Lib.Changes.Services.Storage
         /// </summary>
         FileSnapshot GetImmediateSnapShot(string filePath);
 
-        string GetCurrentChangeId();
+        string? GetCurrentChangeId();
     }
 }

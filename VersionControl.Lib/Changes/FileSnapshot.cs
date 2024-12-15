@@ -6,6 +6,10 @@
 
         public byte[] Data { get; }
 
+        public FileSnapshot(string filePath) : this(filePath, [])
+        {
+        }
+
         public FileSnapshot(string filePath, byte[] data)
         {
             FilePath = filePath;

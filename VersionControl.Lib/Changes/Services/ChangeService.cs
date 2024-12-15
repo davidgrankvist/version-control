@@ -33,9 +33,9 @@ namespace VersionControl.Lib.Changes.Services
             store.Save(changeSet);
         }
 
-        private FileChange GetChange(string filePath, string currentChangeId)
+        private FileChange GetChange(string filePath, string? currentChangeId)
         {
-            var prevSnapshot = store.GetSnapshot(filePath, currentChangeId);
+            var prevSnapshot = currentChangeId == null ? new FileSnapshot(filePath) : store.GetSnapshot(filePath, currentChangeId);
             var newSnapshot = store.GetImmediateSnapShot(filePath);
 
             var change = differ.CalculateChange(prevSnapshot, newSnapshot);

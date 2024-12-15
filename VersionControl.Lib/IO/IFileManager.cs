@@ -8,4 +8,6 @@ public interface IFileManager
     Stream Write(string path);
 
     Stream Append(string path);
+
+    bool Exists(string path);
 }

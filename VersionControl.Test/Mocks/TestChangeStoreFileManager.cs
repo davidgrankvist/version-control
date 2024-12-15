@@ -66,4 +66,9 @@ public class TestChangeStoreFileManager : IFileManager
 
         return file;
     }
+
+    public bool Exists(string path)
+    {
+        return true;
+    }
 }

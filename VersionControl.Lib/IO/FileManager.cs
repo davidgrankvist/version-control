@@ -13,11 +13,32 @@ public class FileManager : IFileManager
     }
     public Stream Write(string path)
     {
-        return File.OpenWrite(path);
+        if (!Exists(path))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            return File.Create(path);
+        }
+        else
+        {
+            return File.OpenWrite(path);
+        }
     }
 
     public Stream Append(string path)
     {
-        return File.Open(path, FileMode.Append);
+        if (!Exists(path))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            return File.Create(path);
+        }
+        else
+        {
+            return File.Open(path, FileMode.Append);
+        }
+    }
+
+    public bool Exists(string path)
+    {
+        return File.Exists(path);
     }
 }

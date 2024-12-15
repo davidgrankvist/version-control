@@ -19,6 +19,11 @@ namespace VersionControl.Lib.Changes.Services
 
         private static string[] ToTextLines(FileSnapshot snapshot)
         {
+            if (snapshot.Data.Length == 0)
+            {
+                return [];
+            }
+
             var dataStr = Encoding.UTF8.GetString(snapshot.Data).ReplaceLineEndings();
             return dataStr.Split(Environment.NewLine);
         }
