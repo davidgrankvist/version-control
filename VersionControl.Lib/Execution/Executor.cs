@@ -1,27 +1,38 @@
 ﻿using VersionControl.Lib.Commands;
 using VersionControl.Lib.Documentation;
+using VersionControl.Lib.IO;
 
 namespace VersionControl.Lib.Execution
 {
     public class Executor : IExecutor
     {
         private readonly IDocumentationService documentationService;
+        private readonly IConsoleService consoleService;
 
-        public Executor(IDocumentationService documentationService)
+        public Executor(IDocumentationService documentationService, IConsoleService consoleService)
         {
             this.documentationService = documentationService;
+            this.consoleService = consoleService;
         }
 
-        public void Execute(IVersionControlCommand command, bool helpMode = false)
+        public void Execute(IVersionControlCommand? command, bool helpMode = false)
         {
-            if (!helpMode && command.CanExecute())
+            string message;
+            if (!helpMode && command != null && command.CanExecute())
             {
-                command.Execute();
+                var result = command.Execute();
+                message = result.Message;
+            }
+            else if (command != null)
+            {
+                message = documentationService.BuildCommandHelp(command.Help());
             }
             else
             {
-                documentationService.ShowCommandHelp(command.Help());
+                message = documentationService.BuildGeneralHelp();
             }
+
+            consoleService.Write(message);
         }
     }
 }

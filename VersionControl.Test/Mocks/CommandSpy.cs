@@ -18,9 +18,11 @@ namespace VersionControl.Test.Mocks
             return CanExecuteEnabled;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             DidExecute = true;
+
+            return CommandResult.Empty;
         }
 
         public CommandDocumentation Help()

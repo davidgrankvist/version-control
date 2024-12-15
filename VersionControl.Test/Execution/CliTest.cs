@@ -11,26 +11,26 @@ namespace VersionControl.Test.Execution
     {
         private Cli cli;
         private ExecutorSpy executor;
-        private DocumentationServiceSpy documentationService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            documentationService = new DocumentationServiceSpy();
             executor = new ExecutorSpy();
             var commandFactory = new CommandFactory(new ChangeServiceSpy());
-            cli = new Cli(executor, documentationService, new ArgumentParser(commandFactory));
+            cli = new Cli(executor, new ArgumentParser(commandFactory));
         }
 
         [DataTestMethod]
         [DataRow(new string[] { "asdfadsf" })]
         [DataRow(new string[] { })]
-        public void ShouldShowGeneralHelp(string[] args)
+        public void ShouldExecuteNullCommand(string[] args)
         {
             cli.Run(args);
 
-            Assert.IsTrue(documentationService.DidShowGeneralHelp);
-            Assert.AreEqual(0, executor.Calls.Count);
+            Assert.AreEqual(1, executor.Calls.Count);
+            var call = executor.Calls.First();
+            Assert.IsNull(call.Command);
+            Assert.IsFalse(call.HelpMode);
         }
 
         [DataTestMethod]

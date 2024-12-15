@@ -10,11 +10,11 @@ namespace VersionControl.Lib.Execution
     {
         public static Cli Create()
         {
-            var documentationService = new ConsoleDocumentationService();
-            var executor = new Executor(documentationService);
+            var documentationService = new DocumentationService();
+            var executor = new Executor(documentationService, new ConsoleService());
             var changeService = new ChangeService(new ChangeStore(new FileManager()), new PathResolver(), new Differ());
             var argumentParser = new ArgumentParser(new CommandFactory(changeService));
-            return new Cli(executor, documentationService, argumentParser);
+            return new Cli(executor, argumentParser);
         }
     }
 }

@@ -9,12 +9,14 @@ namespace VersionControl.Test.Execution
         private Executor executor;
         private CommandSpy command;
         private DocumentationServiceSpy documentationService;
+        private ConsoleServiceSpy consoleService;
 
         [TestInitialize]
         public void TestInitialize()
         {
             documentationService = new DocumentationServiceSpy();
-            executor = new Executor(documentationService);
+            consoleService = new ConsoleServiceSpy();
+            executor = new Executor(documentationService, consoleService);
             command = new CommandSpy();
         }
 
@@ -26,6 +28,7 @@ namespace VersionControl.Test.Execution
             executor.Execute(command);
 
             Assert.IsTrue(command.DidExecute);
+            Assert.AreEqual(1, consoleService.Messages.Count);
         }
 
         [TestMethod]
@@ -38,6 +41,7 @@ namespace VersionControl.Test.Execution
             Assert.IsFalse(command.DidExecute);
             Assert.IsTrue(command.DidHelp);
             Assert.IsTrue(documentationService.ShownDocs.Contains(command.Docs));
+            Assert.AreEqual(1, consoleService.Messages.Count);
         }
 
         [TestMethod]
@@ -50,6 +54,16 @@ namespace VersionControl.Test.Execution
             Assert.IsFalse(command.DidExecute);
             Assert.IsTrue(command.DidHelp);
             Assert.IsTrue(documentationService.ShownDocs.Contains(command.Docs));
+            Assert.AreEqual(1, consoleService.Messages.Count);
+        }
+
+        [TestMethod]
+        public void ShouldShowGeneralHelpIfNullCommand()
+        {
+            executor.Execute(null);
+
+            Assert.IsTrue(documentationService.DidBuildGeneralHelp);
+            Assert.AreEqual(1, consoleService.Messages.Count);
         }
     }
 }

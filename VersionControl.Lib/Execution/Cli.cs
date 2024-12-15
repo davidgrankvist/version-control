@@ -5,13 +5,11 @@ namespace VersionControl.Lib.Execution
 {
     public class Cli
     {
-        private readonly IDocumentationService documentationService;
         private readonly IExecutor executor;
         private readonly ArgumentParser argumentParser;
 
-        public Cli(IExecutor executor, IDocumentationService documentationService, ArgumentParser argumentParser)
+        public Cli(IExecutor executor, ArgumentParser argumentParser)
         {
-            this.documentationService = documentationService;
             this.executor = executor;
             this.argumentParser = argumentParser;
         }
@@ -19,15 +17,7 @@ namespace VersionControl.Lib.Execution
         public void Run(string[] args)
         {
             var (command, helpMode) = argumentParser.Parse(args);
-
-            if (command == null)
-            {
-                documentationService.ShowGeneralHelp();
-            }
-            else
-            {
-                executor.Execute(command, helpMode);
-            }
+            executor.Execute(command, helpMode);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace VersionControl.Lib.Commands
 {
     public interface IVersionControlCommand
     {
-        void Execute();
+        CommandResult Execute();
 
         bool CanExecute();
 

@@ -24,7 +24,7 @@ namespace VersionControl.Lib.Commands
             return false;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             throw new NotImplementedException();
         }

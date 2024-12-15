@@ -5,7 +5,7 @@ namespace VersionControl.Lib.Commands
 {
     public class CompareCommand : IVersionControlCommand
     {
-        private readonly IChangeService changeService;
+        private readonly IChangeService? changeService;
         private readonly string? fromChange;
         private readonly string? toChange;
 
@@ -25,10 +25,10 @@ namespace VersionControl.Lib.Commands
 
         public bool CanExecute()
         {
-            return fromChange != null && toChange != null;
+            return fromChange != null && toChange != null && changeService != null;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             throw new NotImplementedException();
         }

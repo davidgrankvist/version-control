@@ -4,18 +4,20 @@ namespace VersionControl.Test.Mocks
 {
     internal class DocumentationServiceSpy : IDocumentationService
     {
-        public bool DidShowGeneralHelp { get; private set; }
+        public bool DidBuildGeneralHelp { get; private set; }
 
         public List<CommandDocumentation> ShownDocs { get; } = new List<CommandDocumentation>();
 
-        public void ShowCommandHelp(CommandDocumentation commandDoc)
+        public string BuildCommandHelp(CommandDocumentation commandDoc)
         {
             ShownDocs.Add(commandDoc);
+            return string.Empty;
         }
 
-        public void ShowGeneralHelp()
+        public string BuildGeneralHelp()
         {
-            DidShowGeneralHelp = true;
+            DidBuildGeneralHelp = true;
+            return string.Empty;
         }
     }
 }

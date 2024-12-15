@@ -8,7 +8,7 @@ namespace VersionControl.Lib.Commands
         public const string Name = "status";
         private static readonly CommandDocumentation docs = new(Name, "List changes.", "List changes.");
 
-        private readonly IChangeService changeService;
+        private readonly IChangeService? changeService;
 
         public StatusCommand()
         {
@@ -24,7 +24,7 @@ namespace VersionControl.Lib.Commands
             return false;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             throw new NotImplementedException();
         }

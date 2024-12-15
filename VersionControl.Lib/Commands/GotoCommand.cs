@@ -10,7 +10,7 @@ namespace VersionControl.Lib.Commands
         public const string Name = "goto";
         private static readonly CommandDocumentation docs = new(Name, "Time travel.", "Move to a point in history.");
 
-        private readonly IChangeService changeService;
+        private readonly IChangeService? changeService;
 
         public GotoCommand()
         {
@@ -24,10 +24,10 @@ namespace VersionControl.Lib.Commands
 
         public bool CanExecute()
         {
-            return change != null;
+            return change != null && changeService != null;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             throw new NotImplementedException();
         }

@@ -2,8 +2,8 @@
 {
     public interface IDocumentationService
     {
-        void ShowCommandHelp(CommandDocumentation commandDoc);
+        string BuildCommandHelp(CommandDocumentation commandDoc);
 
-        void ShowGeneralHelp();
+        string BuildGeneralHelp();
     }
 }

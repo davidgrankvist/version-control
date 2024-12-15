@@ -34,9 +34,11 @@ namespace VersionControl.Lib.Commands
             return files.Count > 0 && changeService != null;
         }
 
-        public void Execute()
+        public CommandResult Execute()
         {
             changeService!.Save(files, message);
+
+            return new CommandResult("Saved changes.");
         }
 
         public CommandDocumentation Help()

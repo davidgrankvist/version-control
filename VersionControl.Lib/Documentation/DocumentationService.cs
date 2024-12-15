@@ -4,18 +4,18 @@ using VersionControl.Lib.Commands;
 
 namespace VersionControl.Lib.Documentation
 {
-    internal class ConsoleDocumentationService : IDocumentationService
+    internal class DocumentationService : IDocumentationService
     {
         private static readonly CommandDocumentation metaCommand = new CommandDocumentation("vcs", "A version control tool.", "Control your versions.");
 
-        public void ShowCommandHelp(CommandDocumentation commandDoc)
+        public string BuildCommandHelp(CommandDocumentation commandDoc)
         {
-            Console.Write(BuildLongDescriptionString(commandDoc));
+            return BuildLongDescriptionString(commandDoc);
         }
 
-        public void ShowGeneralHelp()
+        public string BuildGeneralHelp()
         {
-            Console.Write(BuildGeneralHelpString());
+            return BuildGeneralHelpString();
         }
 
         private string BuildGeneralHelpString()
