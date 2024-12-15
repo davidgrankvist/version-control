@@ -25,6 +25,7 @@ public static class ChangeLogFileManager
     {
         var fileChanges = new List<FileChange>();
 
+        var message = reader.ReadString();
         var numFileChanges = reader.ReadInt32();
         for (var i = 0; i < numFileChanges; i++)
         {
@@ -32,7 +33,7 @@ public static class ChangeLogFileManager
             fileChanges.Add(fileChange);
         }
 
-        return new ChangeSet(fileChanges);
+        return new ChangeSet(fileChanges, message);
     }
 
     private static FileChange ParseFileChange(BinaryReader reader)
@@ -86,6 +87,7 @@ public static class ChangeLogFileManager
     private static void WriteChangeSet(BinaryWriter writer, ChangeSet changeSet)
     {
         var numFileChanges = changeSet.FileChanges.Count;
+        writer.Write(changeSet.Message);
         writer.Write(numFileChanges);
 
         foreach (var fileChange in changeSet.FileChanges)

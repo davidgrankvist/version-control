@@ -45,6 +45,7 @@ public class ChangeLogFileManagerTest
         var changes = new List<ChangeSet>();
         for (var i = 0; i < numChanges; i++)
         {
+            var msg = $"Change {i}";
             var fileChanges = new List<FileChange>();
             for (var j = 0; j < numFiles; j++)
             {
@@ -55,7 +56,7 @@ public class ChangeLogFileManagerTest
                 fileChanges.Add(new FileChange(fileEvent, filePath, operations));
             }
 
-            changes.Add(new ChangeSet(fileChanges));
+            changes.Add(new ChangeSet(fileChanges, msg));
         }
 
         return changes;

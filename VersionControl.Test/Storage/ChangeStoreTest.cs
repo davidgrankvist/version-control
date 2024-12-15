@@ -141,21 +141,23 @@ public class ChangeStoreTest
         return changeIds;
     }
 
-    private List<ChangeSet> CreateAddOneLineChanges(string filePath, string[] lines)
+    private static List<ChangeSet> CreateAddOneLineChanges(string filePath, string[] lines)
     {
         var changes = new List<ChangeSet>();
-        foreach (var line in lines)
+        for (var i = 0; i < lines.Length; i++)
         {
+            var line = lines[i];
+            var msg = $"Change {i}";
             var operations = LineDiffOperation.Addition(0, 0, [line]);
             var fileChange = new FileChange(FileChangeEvent.Update, filePath, [operations]);
-            var changeSet = new ChangeSet([fileChange]);
+            var changeSet = new ChangeSet([fileChange], msg);
             changes.Add(changeSet);
         }
 
         return changes;
     }
 
-    private FileSnapshot CreateSnapshot(string filePath, string[] lines)
+    private static FileSnapshot CreateSnapshot(string filePath, string[] lines)
     {
         var data = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, lines));
         return new FileSnapshot(filePath, data);

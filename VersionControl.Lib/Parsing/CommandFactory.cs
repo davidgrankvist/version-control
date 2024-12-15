@@ -12,9 +12,9 @@ namespace VersionControl.Lib.Parsing
             this.changeService = changeService;
         }
 
-        public IVersionControlCommand CreateSaveCommand(IReadOnlyCollection<string> filePaths)
+        public IVersionControlCommand CreateSaveCommand(IReadOnlyCollection<string> filePaths, string message)
         {
-            return new SaveCommand(changeService, filePaths);
+            return new SaveCommand(changeService, filePaths, message);
         }
 
         public IVersionControlCommand CreateHistoryCommand()

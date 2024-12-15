@@ -26,7 +26,7 @@ namespace VersionControl.Lib.Documentation
             return desc + Environment.NewLine + Environment.NewLine + cmdList;
         }
 
-        private string BuildShortDescriptionString(CommandDocumentation commandDoc, bool withTab = false)
+        private static string BuildShortDescriptionString(CommandDocumentation commandDoc, bool withTab = false)
         {
             var tabStr = withTab ? "\t" : " ";
             return $"{commandDoc.Name}{tabStr}- {commandDoc.Description}";
@@ -36,6 +36,11 @@ namespace VersionControl.Lib.Documentation
         {
             var shortDesc = BuildShortDescriptionString(commandDoc);
             var longDesc = shortDesc + Environment.NewLine + Environment.NewLine + commandDoc.Summary;
+
+            if (commandDoc.Args.Count > 0)
+            {
+                longDesc += Environment.NewLine + Environment.NewLine +  BuildArgumentListString(commandDoc.Args);
+            }
 
             return longDesc;
         }
@@ -48,7 +53,19 @@ namespace VersionControl.Lib.Documentation
             return title + Environment.NewLine + string.Join(Environment.NewLine, cmds.Select(c => BuildShortDescriptionString(c, true)));
         }
 
-        private IEnumerable<CommandDocumentation> GetCommandDocs()
+        private string BuildArgumentListString(IEnumerable<CommandArg> args)
+        {
+            var title = "Arguments:";
+
+            return title + Environment.NewLine + string.Join(Environment.NewLine, args.Select(BuildArgumentString));
+        }
+
+        private string BuildArgumentString(CommandArg arg)
+        {
+            return $"--{arg.Name}, -{arg.Abbrev}\t - {arg.Description}";
+        }
+
+        private static List<CommandDocumentation> GetCommandDocs()
         {
             var docs = new List<CommandDocumentation>();
 

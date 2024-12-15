@@ -16,7 +16,7 @@ namespace VersionControl.Lib.Changes.Services
             this.differ = differ;
         }
 
-        public void Save(IReadOnlyCollection<string> filePaths)
+        public void Save(IReadOnlyCollection<string> filePaths, string message)
         {
             var changes = new List<FileChange>();
 
@@ -29,7 +29,7 @@ namespace VersionControl.Lib.Changes.Services
                 changes.Add(change);
             }
 
-            var changeSet = new ChangeSet(changes);
+            var changeSet = new ChangeSet(changes, message);
             store.Save(changeSet);
         }
 

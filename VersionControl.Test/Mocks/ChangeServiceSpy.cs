@@ -4,11 +4,11 @@ namespace VersionControl.Test.Mocks
 {
     public class ChangeServiceSpy : IChangeService
     {
-        public List<IReadOnlyCollection<string>> Calls { get; } = [];
+        public List<(IReadOnlyCollection<string> Files, string Message)> Calls { get; } = [];
 
-        public void Save(IReadOnlyCollection<string> filePaths)
+        public void Save(IReadOnlyCollection<string> filePaths, string message)
         {
-            Calls.Add(filePaths);
+            Calls.Add((filePaths, message));
         }
     }
 }

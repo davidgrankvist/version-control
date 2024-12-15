@@ -2,6 +2,6 @@
 {
     public interface IChangeService
     {
-        void Save(IReadOnlyCollection<string> filePaths);
+        void Save(IReadOnlyCollection<string> filePaths, string message);
     }
 }
